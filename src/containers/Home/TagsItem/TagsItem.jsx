@@ -24,7 +24,7 @@ const TagsItem = ({
 
   const upMinor = useCallback((tag, release, iid) => {
     upMinorVersion({ tag, release, iid });
-  }, []);
+  }, [upMinorVersion]);
 
   const upMajor = useCallback((tag, release) => {
     console.log(upMajorVersion(tag), 'release: ', release);
@@ -58,7 +58,7 @@ const TagsItem = ({
         onClick: () => upMajor(lastTag, release),
       },
     ],
-    [],
+    [iid, lastTag, onUpdateDescriptionMergeRequests, release, upMajor, upMinor],
   );
 
   if (!lastTag) {
@@ -72,23 +72,7 @@ const TagsItem = ({
       <Grid item>{tagEqualMr}</Grid>
 
       <Grid item>
-        <MenuButton
-          items={[
-            {
-              label: 'Повысить минорную версию',
-              onClick: () => upMinor(lastTag, release, iid),
-            },
-            {
-              label: 'Обновить пулл реквест',
-              onClick: () => onUpdateDescriptionMergeRequests(iid, lastTag),
-            },
-            {
-              label: 'Повысить мажорную версию',
-              onClick: () => upMajor(lastTag, release),
-            },
-          ]}
-          variant="outlined"
-        />
+        <MenuButton items={actions} variant="outlined" />
       </Grid>
     </Grid>
   );
