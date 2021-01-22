@@ -22,9 +22,12 @@ const TagsItem = ({
     return tags[release]?.name;
   }, [tags, release]);
 
-  const upMinor = useCallback((tag, release, iid) => {
-    upMinorVersion({ tag, release, iid });
-  }, [upMinorVersion]);
+  const upMinor = useCallback(
+    (tag, release, iid) => {
+      upMinorVersion({ tag, release, iid });
+    },
+    [upMinorVersion],
+  );
 
   const upMajor = useCallback((tag, release) => {
     console.log(upMajorVersion(tag), 'release: ', release);
@@ -37,6 +40,12 @@ const TagsItem = ({
     [updateDescriptionMergeRequests],
   );
 
+  const onCopyTable = useCallback((lastTag) => {
+    navigator.clipboard.writeText(
+      `||component||new version|||frontend-markirovka|[${lastTag}|https://git.crptech.ru/frontend/mark/-/tags/${lastTag}]|`,
+    );
+  }, []);
+
   const tagEqualMr = useMemo(() => {
     const tagFromDesc = getTagFromDescription(description);
 
@@ -46,19 +55,33 @@ const TagsItem = ({
   const actions = useMemo(
     () => [
       {
-        label: 'Повысить минорную версию',
-        onClick: () => upMinor(lastTag, release, iid),
+        label: 'Скопировать таблицу версий для Jira',
+        onClick: () => onCopyTable(lastTag),
       },
       {
         label: 'Обновить пулл реквест',
         onClick: () => onUpdateDescriptionMergeRequests(iid, lastTag),
+        disabled: tagEqualMr === null,
+      },
+      {
+        label: 'Повысить минорную версию',
+        onClick: () => upMinor(lastTag, release, iid),
       },
       {
         label: 'Повысить мажорную версию',
         onClick: () => upMajor(lastTag, release),
       },
     ],
-    [iid, lastTag, onUpdateDescriptionMergeRequests, release, upMajor, upMinor],
+    [
+      iid,
+      lastTag,
+      onCopyTable,
+      onUpdateDescriptionMergeRequests,
+      release,
+      tagEqualMr,
+      upMajor,
+      upMinor,
+    ],
   );
 
   if (!lastTag) {

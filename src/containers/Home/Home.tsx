@@ -29,13 +29,6 @@ const Home = ({
     upAllVersions();
   }, [upAllVersions]);
 
-  const onCopyTable = useCallback(() => {
-    navigator.clipboard.writeText(
-      '||component||new version||\n' +
-        '|frontend-markirovka|[elk-17.35.0-RLS-820|https://git.crptech.ru/frontend/mark/-/tags/elk-17.35.0-RLS-820]|',
-    );
-  }, []);
-
   return (
     <Layout>
       <Paper
@@ -54,10 +47,6 @@ const Home = ({
                 Повысить все мажорные версии
               </Button>
             </Grid>
-
-            <Grid item>
-              <Button onClick={onCopyTable}>Табличка версий для Jira</Button>
-            </Grid>
           </Grid>
         </Box>
 
@@ -71,14 +60,28 @@ const Home = ({
                   </Link>
                 </Typography>
               </Grid>
-              <Grid item>{item.source_branch}</Grid>
+            </Grid>
+
+            <Grid
+              container
+              spacing={2}
+              alignItems="center"
+              style={{ minHeight: 64 }}
+            >
+              <Grid item>
+                <Link
+                  href={`https://jira.crpt.ru/browse/${item.release}`}
+                  target="_blank"
+                >
+                  {item.source_branch}
+                </Link>
+              </Grid>
               <Grid item>
                 <TagsItemConnected mergeRequest={item} />
               </Grid>
-              <Grid item xs={12}>
-                <Separator />
-              </Grid>
             </Grid>
+
+            <Separator mt={2} />
           </Box>
         ))}
       </Paper>
