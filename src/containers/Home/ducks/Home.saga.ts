@@ -1,13 +1,17 @@
 import {
+  call,
   put,
   select,
-  takeEvery,
   take,
-  call,
+  takeEvery,
   takeLatest,
 } from 'redux-saga/effects';
 
-import { upMajorVersion, getTagFromDescription } from 'utils/versions.utils';
+import {
+  getTagFromDescription,
+  getUpMinorVersion,
+  upMajorVersion,
+} from 'utils/versions.utils';
 
 import {
   createNewTag,
@@ -16,11 +20,11 @@ import {
   fetchTags,
   startFetchTags,
   upAllVersions,
-  upMinorVersion,
-  updateMergeRequests,
   updateDescriptionMergeRequests,
+  updateMergeRequests,
+  upMinorVersion,
 } from './Home.reducer';
-import { getTags, getMergeRequests } from './Home.selectors';
+import { getMergeRequests, getTags } from './Home.selectors';
 
 function* upAllVersionsSaga() {
   const tags = yield select(getTags);
@@ -79,7 +83,7 @@ function* updateMergeRequestsSaga({
 }
 
 function* upMinorVersionSaga({ payload: { tag, release, iid } }: any) {
-  const newTag = yield call(upMinorVersion, tag);
+  const newTag = yield call(getUpMinorVersion, tag);
 
   yield put(
     createNewTag({

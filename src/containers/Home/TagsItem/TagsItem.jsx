@@ -6,11 +6,7 @@ import { MenuButton } from '@crpt-ui/core';
 import { connect } from 'react-redux';
 
 import { getTagFromDescription, upMajorVersion } from 'utils/versions.utils';
-import {
-  getTags,
-  upMinorVersion,
-  updateDescriptionMergeRequests,
-} from '../ducks';
+import { getTags, updateDescriptionMergeRequests, upMinorVersion } from '../ducks';
 
 const TagsItem = ({
   upMinorVersion,

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Box, Grid, Paper } from '@material-ui/core';
 // @ts-ignore
-import { Button, Typography, Link } from '@crpt-ui/core';
+import { Button, Link, Typography } from '@crpt-ui/core';
 
 import { Layout } from 'components/Layout/Layout';
 import { Separator } from 'components/Separator/Separator';

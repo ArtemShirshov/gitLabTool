@@ -19,10 +19,11 @@ export const upMajorVersion = (tag: string) => {
   return getNewTag(tag, oldVersion, newVersion);
 };
 
-export const upMinorVersion = (tag: string) => {
+export const getUpMinorVersion = (tag: string) => {
   const oldVersion = getVersionFromTag(tag);
   const version = getVersionsArray(oldVersion);
   const newVersion = `${version[0]}.${version[1]}.${version[2] + 1}`;
+
   return getNewTag(tag, oldVersion, newVersion);
 };
 
