@@ -1,4 +1,4 @@
-export { getMergeRequests, getTags } from './Home.selectors';
+export { getMergeRequests, getTags, getTagsLoading } from './Home.selectors';
 
 export {
   createNewTag,
@@ -8,6 +8,7 @@ export {
   openApproveModal,
   startFetchTags,
   tags,
+  tagLoading,
   upAllVersions,
   updateDescriptionMergeRequests,
   upMinorVersion,

@@ -92,9 +92,17 @@ export const tags = handleActions(
 
       return {
         ...state,
-        [key]: value,
+        [key]: value === undefined ? null : value,
       };
     },
   },
   {},
+);
+
+export const tagLoading = handleActions(
+  {
+    [fetchTags]: (): any => true,
+    [`${fetchTags}_SUCCESS`]: (): any => false,
+  },
+  false,
 );

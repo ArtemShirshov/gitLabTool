@@ -8,7 +8,7 @@ const configuration = {
     Accept: 'application/json;charset=UTF-8',
     'Content-Type': 'application/json;charset=UTF-8',
     Pragma: 'no-cache',
-    'PRIVATE-TOKEN': 'rePXzTu55MhR9Rx_TG1a',
+    'PRIVATE-TOKEN': 'T1MWsgQNcwvvz8Nf72ix',
   },
   mode: 'no-cors',
   timeout: 60000,

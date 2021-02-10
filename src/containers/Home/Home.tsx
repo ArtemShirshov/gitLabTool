@@ -7,6 +7,7 @@ import { Button, Link, Typography } from '@crpt-ui/core';
 import { Layout } from 'components/Layout/Layout';
 import { Separator } from 'components/Separator/Separator';
 
+import { CreateTagDialogConnected } from './CreateTagDialog/CreateTagDialog';
 import { TagsItemConnected } from './TagsItem/TagsItem';
 import {
   fetchMergeRequests,
@@ -31,6 +32,8 @@ const Home = ({
 
   return (
     <Layout>
+      <CreateTagDialogConnected />
+
       <Paper
         elevation={3}
         style={{
@@ -52,15 +55,11 @@ const Home = ({
 
         {mergeRequests.map((item: any) => (
           <Box key={`${item.source_branch}_${item.updated_at}`}>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={12}>
-                <Typography variant="h5">
-                  <Link href={item.web_url} target="_blank">
-                    {item.title}
-                  </Link>
-                </Typography>
-              </Grid>
-            </Grid>
+            <Typography variant="h5">
+              <Link href={item.web_url} target="_blank">
+                {item.title}
+              </Link>
+            </Typography>
 
             <Grid
               container

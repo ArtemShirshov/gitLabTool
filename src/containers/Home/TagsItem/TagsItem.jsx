@@ -2,17 +2,25 @@
 import React, { useCallback, useMemo } from 'react';
 import { CircularProgress, Grid } from '@material-ui/core';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
-import { MenuButton } from '@crpt-ui/core';
+import { MenuButton, Button } from '@crpt-ui/core';
 import { connect } from 'react-redux';
 
 import { getTagFromDescription, upMajorVersion } from 'utils/versions.utils';
-import { getTags, updateDescriptionMergeRequests, upMinorVersion } from '../ducks';
+import {
+  getTags,
+  getTagsLoading,
+  updateDescriptionMergeRequests,
+  upMinorVersion,
+} from '../ducks';
+import { openCreateTagDialog } from '../CreateTagDialog/ducks/CreateTagDialog.reducer';
 
 const TagsItem = ({
+  openCreateTagDialog,
   upMinorVersion,
   updateDescriptionMergeRequests,
   mergeRequest: { iid, description, release },
   tags,
+  tagsLoading,
 }) => {
   const lastTag = useMemo(() => {
     return tags[release]?.name;
@@ -38,9 +46,23 @@ const TagsItem = ({
 
   const onCopyTable = useCallback((lastTag) => {
     navigator.clipboard.writeText(
-      `||component||new version|||frontend-markirovka|[${lastTag}|https://git.crptech.ru/frontend/mark/-/tags/${lastTag}]|`,
+      `||component||new version||
+      |frontend-markirovka|[${lastTag}|https://git.crptech.ru/frontend/mark/-/tags/${lastTag}]|`,
     );
   }, []);
+
+  const onCopyReleaseNote = useCallback(
+    (lastTag) => {
+      navigator.clipboard.writeText(
+        `Тег: ${lastTag} \nGitLab: https://git.crptech.ru/frontend/mark/-/tags/${lastTag} \nJira: https://jira.crpt.ru/browse/${release}`,
+      );
+    },
+    [release],
+  );
+
+  const onOpenDialog = useCallback(() => {
+    openCreateTagDialog({ release });
+  }, [openCreateTagDialog, release]);
 
   const tagEqualMr = useMemo(() => {
     const tagFromDesc = getTagFromDescription(description);
@@ -53,6 +75,10 @@ const TagsItem = ({
       {
         label: 'Скопировать таблицу версий для Jira',
         onClick: () => onCopyTable(lastTag),
+      },
+      {
+        label: 'Скопировать Release Note',
+        onClick: () => onCopyReleaseNote(lastTag),
       },
       {
         label: 'Обновить пулл реквест',
@@ -71,6 +97,7 @@ const TagsItem = ({
     [
       iid,
       lastTag,
+      onCopyReleaseNote,
       onCopyTable,
       onUpdateDescriptionMergeRequests,
       release,
@@ -80,7 +107,21 @@ const TagsItem = ({
     ],
   );
 
-  if (!lastTag) {
+  if (tags[release] === null) {
+    return (
+      <Grid container spacing={2} alignItems="center">
+        <Grid item>
+          <WarningRoundedIcon /> Нет тега
+        </Grid>
+
+        <Grid item>
+          <Button onClick={onOpenDialog}>Создать тег</Button>
+        </Grid>
+      </Grid>
+    );
+  }
+
+  if (tagsLoading) {
     return <CircularProgress size={20} />;
   }
 
@@ -100,9 +141,11 @@ const TagsItem = ({
 // @ts-ignore
 const mapStateToProps = (state) => ({
   tags: getTags(state),
+  tagsLoading: getTagsLoading(state),
 });
 
 const mapDispatchToProps = {
+  openCreateTagDialog,
   upMinorVersion,
   updateDescriptionMergeRequests,
 };

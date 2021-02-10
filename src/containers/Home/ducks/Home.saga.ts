@@ -67,12 +67,19 @@ function* fetchTagsSaga() {
 function* updateMergeRequestsSaga({
   payload: { iid, newTag, isUpdatingData = true },
 }: any) {
+  let newDesc;
+
   yield put(fetchSingleMergeRequests({ mergeRequestId: iid }));
   const data = yield take(`${fetchSingleMergeRequests}_SUCCESS`);
 
   const desc = data.payload.data.description;
   const tagFromDesc = getTagFromDescription(desc);
-  const newDesc = desc?.replace(tagFromDesc, newTag);
+
+  if (tagFromDesc === null) {
+    newDesc = `Tag: ${newTag}`;
+  } else {
+    newDesc = desc?.replace(tagFromDesc, newTag);
+  }
 
   yield put(updateMergeRequests({ mergeRequestId: iid, description: newDesc }));
 
